@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 6577277477208327985}
   - component: {fileID: 8068932189387214357}
   - component: {fileID: 2557752370878180075}
+  - component: {fileID: 1644687521}
   m_Layer: 10
   m_Name: MinigunProjectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,3 +120,19 @@ CircleCollider2D:
   m_Offset: {x: -0.001906991, y: 0}
   serializedVersion: 2
   m_Radius: 0.10376787
+--- !u!114 &1644687521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5804488788389323726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f061766d05e7d489b5709f7a412883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 50
+  knockbackStrength: 100
+  knockbackTime: 0.1
+  shrapnel: {fileID: 0}
