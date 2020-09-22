@@ -190,9 +190,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42475963ad49f1041916b4950aaef312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 1
   health: 100
   damage: 25
   knockbackStrength: 100
+  knockbackTime: 0.5
+  attackCooldown: 1
   deathVFX: {fileID: 8826925166968677894, guid: 8c34a8cc4c9eee745823602b3f332d74,
     type: 3}

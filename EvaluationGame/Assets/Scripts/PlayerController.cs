@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private float _shotTime = 0f;
     private float _stunTime = 0f;
     private float _stunDuration = 0f;
+    private bool _isAlive = true;
 
     [SerializeField] float health = 100f;
     [SerializeField] float moveSpeed = 1f;
@@ -31,19 +32,25 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if(Time.time - _stunTime >= _stunDuration)
+        if (_isAlive)
         {
-            Move();
+            if (Time.time - _stunTime >= _stunDuration)
+            {
+                Move();
+            }
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        FaceCursor();
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (_isAlive)
         {
-            Shoot();
+            FaceCursor();
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                Shoot();
+            }
         }
     }
 
@@ -76,9 +83,14 @@ public class PlayerController : MonoBehaviour
     {
         health -= damage;
         Instantiate(hurtParticles, transform.position, Quaternion.identity);
-        //if health <= 0
-        //Game Over
-        //Return
+        if(health <= 0)
+        {
+            _isAlive = false;
+            //GAME OVER BITCH
+            //MAKE A STATS SCREEN THAT WILL BE COOL
+            
+            //GO TO STATS SCREEN
+        }
         _myRigidbody.AddForce(knockbackDir * knockbackStrength);
         _stunTime = Time.time;
         _stunDuration = knockbackTime;

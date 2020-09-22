@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public float ActiveGameTime = 0f;
+    public int CurrentWave = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,10 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void UpdateCurrentWave(int currWave)
+    {
+        CurrentWave = currWave;
     }
 }
