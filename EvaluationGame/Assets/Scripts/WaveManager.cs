@@ -17,34 +17,44 @@ public class WaveManager : MonoBehaviour
     private int _numPremadeWaves = 0;
     private bool _waveActive = false;
     private bool _cooldownActive = false;
+    public bool GameActive = false;
     [SerializeField] int allowedActiveWaves = 1;
     [SerializeField] float delayBetweenWaves = 5f;
 
-    private GameManager _gameManager;
+    private GameSession _gameSession;
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
-        _gameManager = GetComponent<GameManager>();
+        yield return new WaitForEndOfFrame();
+        _gameSession = FindObjectOfType<GameSession>();
         _spawnpoints = GetSpawnpoints();
         _numPremadeWaves = premadeEnemyWaves.Count;
+        _gameSession.StartGame();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(_waveIndex <= _numPremadeWaves)
+        if (GameActive)
         {
-            RunPremadeWaves();
+            if (_waveIndex <= _numPremadeWaves)
+            {
+                RunPremadeWaves();
+            }
+            else
+            {
+                Debug.Log("Out of intro waves");
+                //BEFORE YOU START TRYING TO MAKE SPECIAL ENEMIES AND WAVES, MAKE SURE THE GAME WORKS WITH JUST BASIC ENEMIES AND WEAPONS. 
+                //Want to run waves incrementing by 5 enemies each time (Will this be too hard?)
+                //If we want to spawn 20 enemies, we spawn waves of 10 twice
+                //Sprinkle in some special enemy waves too
+            }
         }
-        else
+        else if(_waveActive && !GameActive)
         {
-            Debug.Log("Out of intro waves");
-            //BEFORE YOU START TRYING TO MAKE SPECIAL ENEMIES AND WAVES, MAKE SURE THE GAME WORKS WITH JUST BASIC ENEMIES AND WEAPONS. 
-            //Want to run waves incrementing by 5 enemies each time (Will this be too hard?)
-            //If we want to spawn 20 enemies, we spawn waves of 10 twice
-            //Sprinkle in some special enemy waves too
+            //(hopefully) Stop enemies from spawning if player dies mid wave
+            StopAllCoroutines();
         }
-        
     }
 
     private void RunPremadeWaves()
@@ -63,7 +73,7 @@ public class WaveManager : MonoBehaviour
             //Introduce a wave cooldown between waves or should it be nonstop?
             StartWave(premadeEnemyWaves[_waveIndex]);
             _waveIndex++;
-            //_waveIndex = _waveIndex % _numWaves;
+            _waveIndex = _waveIndex % _numPremadeWaves; //Remove this once the "Dynamic waves" start
         }
     }
 
@@ -99,6 +109,7 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator SpawnEnemiesInWave(WaveConfig waveConfig)
     {
+        Debug.Log("Booling");
         for (int enemiesSpawned = 0; 
             enemiesSpawned < waveConfig.GetNumberOfEnemies(); 
             enemiesSpawned++)
@@ -108,6 +119,7 @@ public class WaveManager : MonoBehaviour
                                     _spawnpoints[FindRandomSpawnpointIndex()].transform.position,
                                     Quaternion.identity);
             enemy.transform.parent = gameObject.transform;
+            Debug.Log("BOOLING");
 
             yield return new WaitForSeconds(waveConfig.GetTimeBetweenSpawns() + Random.Range(-waveConfig.GetRandomSpawnOffset(), 
                                                                                                 waveConfig.GetRandomSpawnOffset()));
@@ -145,6 +157,6 @@ public class WaveManager : MonoBehaviour
         _waveActive = false;
         _activeWaves = 0;
         _cooldownActive = false;
-        _gameManager.UpdateCurrentWave(_waveIndex);
+        _gameSession.UpdateCurrentWave(_waveIndex);
     }
 }

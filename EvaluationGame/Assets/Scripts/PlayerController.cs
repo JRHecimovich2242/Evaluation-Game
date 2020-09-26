@@ -86,10 +86,8 @@ public class PlayerController : MonoBehaviour
         if(health <= 0)
         {
             _isAlive = false;
-            //GAME OVER BITCH
-            //MAKE A STATS SCREEN THAT WILL BE COOL
-            
-            //GO TO STATS SCREEN
+            //GAME OVER
+            FindObjectOfType<GameSession>().EndGame();
         }
         _myRigidbody.AddForce(knockbackDir * knockbackStrength);
         _stunTime = Time.time;
