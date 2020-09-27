@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float knockbackTime = .5f;
     [SerializeField] float attackCooldown = 1f;
     [SerializeField] ParticleSystem deathVFX;
+    [SerializeField] float knockbackScale = 1f;
 
     private PlayerController _playerController;
     private Rigidbody2D _myRigidbody;
@@ -75,7 +76,7 @@ public class EnemyController : MonoBehaviour
             Instantiate(deathVFX, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
-        _myRigidbody.AddForce(knockbackDir * knockbackStrength);
+        _myRigidbody.AddForce(knockbackDir * knockbackStrength * knockbackScale);
         _stunTime = Time.time;
         _stunDuration = knockbackTime;
     }

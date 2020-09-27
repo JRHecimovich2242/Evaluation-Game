@@ -81,9 +81,16 @@ public class GameSession : MonoBehaviour
 
     public void EndGame()
     {
+        Time.timeScale = .7f;
         _waveManager.enabled = false;
         _gameActive = false;
-        SceneManager.LoadScene(2);
+        StartCoroutine(LoadGameOver());
 
+    }
+    IEnumerator LoadGameOver()
+    {
+        yield return new WaitForSeconds(1f);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(2);
     }
 }

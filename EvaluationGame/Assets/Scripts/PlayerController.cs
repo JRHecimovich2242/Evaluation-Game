@@ -17,11 +17,17 @@ public class PlayerController : MonoBehaviour
     private float _stunTime = 0f;
     private float _stunDuration = 0f;
     private bool _isAlive = true;
+    private bool _hitboxActive = true;
+    [SerializeField] bool _tripleshotActive = false;
+    [SerializeField] float _tripleshotAmmo = 20f;
+    private int _tripleshotAngle = 30;
+    
 
     [SerializeField] float health = 100f;
     [SerializeField] float moveSpeed = 1f;
     [SerializeField] float bulletSpeed = 5f;
     [SerializeField] float shootingCooldown = .5f;
+    [SerializeField] float damageCooldown = 1f;
     [SerializeField] GameObject gunBarrel;
     [SerializeField] Rigidbody2D projectile;
     [SerializeField] ParticleSystem hurtParticles;
@@ -70,27 +76,82 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        if (Time.time - _shotTime >= shootingCooldown){
-            _shotTime = Time.time;
-            Rigidbody2D bullet = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
-            //bullet.AddForce(transform.right * bulletSpeed);
-            bullet.velocity = transform.right * bulletSpeed;
+        if (!_tripleshotActive)
+        {
+            if (Time.time - _shotTime >= shootingCooldown)
+            {
+                _shotTime = Time.time;
+                Rigidbody2D bullet = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
+                //bullet.AddForce(transform.right * bulletSpeed);
+                bullet.velocity = transform.right * bulletSpeed;
+            }
+        }
+        else
+        {
+            if(_tripleshotAmmo <= 0)
+            {
+                _tripleshotActive = false;
+            }
+            else if(Time.time - _shotTime >= shootingCooldown)
+            {
+                Debug.Log(transform.right);
+                //Fire tripleshot
+                _shotTime = Time.time;
+                Rigidbody2D bullet1 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
+                //bullet.AddForce(transform.right * bulletSpeed);
+                bullet1.velocity = RotateVector(transform.right, _tripleshotAngle) * bulletSpeed;
+                _shotTime = Time.time;
+                Rigidbody2D bullet2 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
+                //bullet.AddForce(transform.right * bulletSpeed);
+                bullet2.velocity = RotateVector(transform.right, -_tripleshotAngle) * bulletSpeed;
+                Rigidbody2D bullet3 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
+                bullet3.velocity = transform.right * bulletSpeed;
+            }
         }
 
     }
     //knockbackDir is a normalized Vector3 representing the unit vector originating from the damaging entity and pointing towards the player
     public void TakeDamage(float damage, Vector3 knockbackDir, float knockbackStrength, float knockbackTime)
     {
-        health -= damage;
-        Instantiate(hurtParticles, transform.position, Quaternion.identity);
-        if(health <= 0)
+        if (_hitboxActive)
         {
-            _isAlive = false;
-            //GAME OVER
-            FindObjectOfType<GameSession>().EndGame();
+            health -= damage;
+            Instantiate(hurtParticles, transform.position, Quaternion.identity);
+            if (health <= 0)
+            {
+                _isAlive = false;
+                //GAME OVER
+                FindObjectOfType<GameSession>().EndGame();
+            }
+            //_myRigidbody.AddForce(knockbackDir * knockbackStrength);
+            //_stunTime = Time.time;
+            //_stunDuration = knockbackTime;
+            StartCoroutine(DisableHurt());
         }
-        _myRigidbody.AddForce(knockbackDir * knockbackStrength);
-        _stunTime = Time.time;
-        _stunDuration = knockbackTime;
+    }
+
+    IEnumerator DisableHurt()
+    {
+        _hitboxActive = false;
+        yield return new WaitForSeconds(damageCooldown);
+        _hitboxActive = true;
+    }
+
+    public void UpdateFireRate(float newFiringDelay)
+    {
+        shootingCooldown = newFiringDelay;
+    }
+
+    public void StartTripleShot()
+    {
+
+    }
+
+    private Vector3 RotateVector(Vector3 vect, int angle)
+    {
+        float rads = angle * Mathf.Deg2Rad;
+        return new Vector3((vect.x * Mathf.Cos(rads) - vect.y * Mathf.Sin(rads)),
+                           (vect.x * Mathf.Sin(rads) - vect.y * Mathf.Cos(rads)),
+                           vect.z);
     }
 }
