@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
     {
         float rads = angle * Mathf.Deg2Rad;
         return new Vector3((vect.x * Mathf.Cos(rads) - vect.y * Mathf.Sin(rads)),
-                           (vect.x * Mathf.Sin(rads) - vect.y * Mathf.Cos(rads)),
+                           (vect.x * Mathf.Sin(rads) + vect.y * Mathf.Cos(rads)),
                            vect.z);
     }
 }
