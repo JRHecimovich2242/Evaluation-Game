@@ -44,10 +44,10 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log("We eating?");
+        //Debug.Log("We eating?");
         if (collision.gameObject.CompareTag("Player") && (Time.time - _attackTime >= attackCooldown))
         {
-            Debug.Log("Eat that Player");
+            //Debug.Log("Eat that Player");
             //Deal damage to player
             _attackTime = Time.time;
             //PlayerController player = collision.gameObject.GetComponent<PlayerController>();

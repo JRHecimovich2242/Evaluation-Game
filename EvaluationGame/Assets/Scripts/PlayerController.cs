@@ -18,12 +18,18 @@ public class PlayerController : MonoBehaviour
     private float _stunDuration = 0f;
     private bool _isAlive = true;
     private bool _hitboxActive = true;
+    [SerializeField] int _maxAmmo = 30;
+    private int _currentAmmo = 0;
     [SerializeField] bool _tripleshotActive = false;
-    [SerializeField] float _tripleshotAmmo = 20f;
-    private int _tripleshotAngle = 30;
+    [SerializeField] int _maxTripleshotAmmo = 30;
+    private int _currentTripleshotAmmo = 0;
+    [SerializeField] int _tripleshotAngle = 30;
+    [SerializeField] float reloadTime = 2f;
+    [SerializeField] bool _reloading = false;
     
 
-    [SerializeField] float health = 100f;
+    [SerializeField] float _maxHealth = 100f;
+    private float _health = 0f;
     [SerializeField] float moveSpeed = 1f;
     [SerializeField] float bulletSpeed = 5f;
     [SerializeField] float shootingCooldown = .5f;
@@ -34,7 +40,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _health = _maxHealth;
         _myRigidbody = GetComponent<Rigidbody2D>();
+        _currentAmmo = _maxAmmo;
     }
     void FixedUpdate()
     {
@@ -53,7 +61,7 @@ public class PlayerController : MonoBehaviour
         if (_isAlive)
         {
             FaceCursor();
-            if (Input.GetKey(KeyCode.Mouse0))
+            if (Input.GetKey(KeyCode.Mouse0) && !_reloading)
             {
                 Shoot();
             }
@@ -76,48 +84,43 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        if (!_tripleshotActive)
+
+        if(_currentAmmo > 0)
         {
             if (Time.time - _shotTime >= shootingCooldown)
             {
+                _currentAmmo--;
                 _shotTime = Time.time;
                 Rigidbody2D bullet = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
                 //bullet.AddForce(transform.right * bulletSpeed);
                 bullet.velocity = transform.right * bulletSpeed;
+                if (_tripleshotActive)
+                {
+                    Rigidbody2D bullet1 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
+                    //bullet.AddForce(transform.right * bulletSpeed);
+                    bullet1.velocity = RotateVector(transform.right, _tripleshotAngle) * bulletSpeed;
+                    _shotTime = Time.time;
+                    Rigidbody2D bullet2 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
+                    //bullet.AddForce(transform.right * bulletSpeed);
+                    bullet2.velocity = RotateVector(transform.right, -_tripleshotAngle) * bulletSpeed;
+                }
             }
         }
         else
         {
-            if(_tripleshotAmmo <= 0)
-            {
-                _tripleshotActive = false;
-            }
-            else if(Time.time - _shotTime >= shootingCooldown)
-            {
-                Debug.Log(transform.right);
-                //Fire tripleshot
-                _shotTime = Time.time;
-                Rigidbody2D bullet1 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
-                //bullet.AddForce(transform.right * bulletSpeed);
-                bullet1.velocity = RotateVector(transform.right, _tripleshotAngle) * bulletSpeed;
-                _shotTime = Time.time;
-                Rigidbody2D bullet2 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
-                //bullet.AddForce(transform.right * bulletSpeed);
-                bullet2.velocity = RotateVector(transform.right, -_tripleshotAngle) * bulletSpeed;
-                Rigidbody2D bullet3 = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
-                bullet3.velocity = transform.right * bulletSpeed;
-            }
+            StartCoroutine(Reload());
         }
-
     }
+
+
     //knockbackDir is a normalized Vector3 representing the unit vector originating from the damaging entity and pointing towards the player
     public void TakeDamage(float damage, Vector3 knockbackDir, float knockbackStrength, float knockbackTime)
     {
         if (_hitboxActive)
         {
-            health -= damage;
+            _health -= damage;
             Instantiate(hurtParticles, transform.position, Quaternion.identity);
-            if (health <= 0)
+            if (_health <= 0)
             {
                 _isAlive = false;
                 //GAME OVER
@@ -142,16 +145,55 @@ public class PlayerController : MonoBehaviour
         shootingCooldown = newFiringDelay;
     }
 
-    public void StartTripleShot()
-    {
-
-    }
-
     private Vector3 RotateVector(Vector3 vect, int angle)
     {
         float rads = angle * Mathf.Deg2Rad;
         return new Vector3((vect.x * Mathf.Cos(rads) - vect.y * Mathf.Sin(rads)),
                            (vect.x * Mathf.Sin(rads) + vect.y * Mathf.Cos(rads)),
                            vect.z);
+    }
+
+    public float GetHealthFraction()
+    {
+        return _health / _maxHealth;
+    }
+
+    public int GetCurrentAmmo()
+    {
+        return _currentAmmo;
+    }
+
+    public int GetMaxAmmo()
+    {
+        return _maxAmmo;
+    }
+
+    IEnumerator Reload()
+    {
+        _reloading = true;
+        yield return new WaitForSeconds(reloadTime);
+        _tripleshotActive = false;
+        _currentAmmo = _maxAmmo;
+        _reloading = false;
+    }
+
+    public void StartTripleShot()
+    {
+        _tripleshotActive = true;
+        _currentAmmo = _maxAmmo;
+    }
+
+    public void IncreaseMaxAmmo(int pickupValue)
+    {
+        _maxAmmo += pickupValue;
+    }
+
+    public void RestoreHealth(float pickupValue)
+    {
+        _health += pickupValue;
+        if(_health > _maxHealth)
+        {
+            _health = _maxHealth;
+        }
     }
 }
