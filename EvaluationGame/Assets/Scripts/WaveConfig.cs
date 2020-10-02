@@ -11,11 +11,13 @@ public class WaveConfig : ScriptableObject
     [SerializeField] float randomSpawnOffset = 0.3f; //Random factor so that all enemies in a wave arent spaced uniformly
     [SerializeField] int numEnemies = 5;
     [SerializeField] float startDelay = 0f;
+    [SerializeField] bool isSpecialWave = false;
     
     public GameObject GetEnemyPrefab() { return enemyPrefab; }
-    public GameObject GetSpawnpointPrefab() { return enemyPrefab; }
+    public GameObject GetSpawnpointPrefab() { return spawnpointPrefab; }
     public float GetTimeBetweenSpawns() { return timeBetweenSpawns; }
     public float GetRandomSpawnOffset() { return randomSpawnOffset; }
     public int GetNumberOfEnemies() { return numEnemies; }
     public float GetStartDelay() { return startDelay; }
+    public bool GetIsSpecialWave() { return isSpecialWave; }
 }

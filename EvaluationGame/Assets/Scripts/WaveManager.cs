@@ -33,6 +33,7 @@ public class WaveManager : MonoBehaviour
     public bool GameActive = false;
     [SerializeField] int allowedActiveWaves = 1;
     [SerializeField] float delayBetweenWaves = 5f;
+    [SerializeField] int waveLoops = 0;
 
     private GameSession _gameSession;
     // Start is called before the first frame update
@@ -62,7 +63,10 @@ public class WaveManager : MonoBehaviour
                 //Want to run waves incrementing by 5 enemies each time (Will this be too hard?)
                 //If we want to spawn 20 enemies, we spawn waves of 10 twice
                 //Sprinkle in some special enemy waves too
-                RunDynamicWaves();
+                //RunDynamicWaves();
+                _waveIndex = 0;
+                waveLoops++;
+
             }
         }
         else if(_waveActive && !GameActive)
@@ -74,20 +78,9 @@ public class WaveManager : MonoBehaviour
 
     private void RunPremadeWaves()
     {
-        if (_waveActive)
+        if (!_waveActive)
         {
-            if (gameObject.transform.childCount == 0 && !_cooldownActive)
-            {
-                _cooldownActive = true;
-                StartCoroutine(WaveCooldown());
-            }
-        }
-        if (_activeWaves == 0 || _activeWaves < allowedActiveWaves)
-        {
-            //Introduce a wave cooldown between waves or should it be nonstop?
             StartWave(premadeEnemyWaves[_waveIndex]);
-
-            //_waveIndex = _waveIndex % _numPremadeWaves; //Remove this once the "Dynamic waves" start
         }
     }
 
@@ -130,10 +123,20 @@ public class WaveManager : MonoBehaviour
     {
         _waveIndex++;
         _spawning = true;
-        Debug.Log("Starting a wave");
+        //Debug.Log("Starting a wave");
         _activeWaves++;
         _waveActive = true;
+        _gameSession.UpdateCurrentWave(_waveIndex);
         StartCoroutine(SpawnEnemiesInWave(enemyWave));
+        if (enemyWave.GetIsSpecialWave())
+        {
+            if(waveLoops > 0)
+            {
+                //After first loop we want to start piling regular enemies on top of special enemies
+                StartCoroutine(SpawnEnemiesInWave(fiveEnemyWave));
+            }
+            
+        }
     }
 
     public void StartWave(WaveConfig waveConfig, WaveConfig specialWave)
@@ -166,6 +169,8 @@ public class WaveManager : MonoBehaviour
                                                                                                 waveConfig.GetRandomSpawnOffset()));
         }
         _spawning = false;
+        _cooldownActive = true;
+        StartCoroutine(WaveCooldown());
     }
 
     //Maybe make an overload for SpawnEnemiesInWave that takes the WaveConfig and a delay float. We only need one spawn coroutine because we can have multiple waves spawning at once

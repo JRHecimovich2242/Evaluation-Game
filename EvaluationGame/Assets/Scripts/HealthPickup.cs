@@ -5,6 +5,7 @@ using UnityEngine;
 public class HealthPickup : MonoBehaviour
 {
     [SerializeField] float pickupValue = 10f;
+    [SerializeField] float despawnDelay = 10f;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +25,9 @@ public class HealthPickup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().RestoreHealth(pickupValue);
-            Destroy(gameObject);
+            Destroy(gameObject, despawnDelay);
         }
     }
+
+    
 }

@@ -22,6 +22,8 @@ public class UpdateAmmoText : MonoBehaviour
 
     private void UpdateText()
     {
-        _ammoCountText.text = _playerController.GetCurrentAmmo().ToString();
+        _ammoCountText.text = _playerController.GetCurrentAmmo().ToString() 
+                                + "/" 
+                                + _playerController.GetMaxAmmo().ToString();
     }
 }

@@ -190,8 +190,26 @@ PrefabInstance:
     - target: {fileID: 985710309605589405, guid: 3e8385572bc8c244b93809b53fe124e5,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3520271668535292915, guid: 3e8385572bc8c244b93809b53fe124e5,
+        type: 3}
+      propertyPath: tripleshotPickupPrefab
+      value: 
+      objectReference: {fileID: 4976811722785280885, guid: 1bfccf9c60f61e24fab550aed491dbaf,
+        type: 3}
+    - target: {fileID: 3520271668535292915, guid: 3e8385572bc8c244b93809b53fe124e5,
+        type: 3}
+      propertyPath: healthPickupPrefab
+      value: 
+      objectReference: {fileID: 5082291916799063522, guid: 4363305dc1afacf44bcad17dd220a82f,
+        type: 3}
+    - target: {fileID: 3520271668535292915, guid: 3e8385572bc8c244b93809b53fe124e5,
+        type: 3}
+      propertyPath: ammoPickupPrefab
+      value: 
+      objectReference: {fileID: 8820636598833838827, guid: 9848ec101266cde4283c9a5a37be82bd,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e8385572bc8c244b93809b53fe124e5, type: 3}
 --- !u!1 &251713962
@@ -241,6 +259,7 @@ MonoBehaviour:
   GameActive: 0
   allowedActiveWaves: 1
   delayBetweenWaves: 5
+  waveLoops: 0
 --- !u!4 &251713964
 Transform:
   m_ObjectHideFlags: 0

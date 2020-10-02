@@ -70,9 +70,16 @@ public class EnemyController : MonoBehaviour
     //knockbackDir is a normalized Vector3 representing the unit vector originating from the damaging entity and pointing towards the player
     public void TakeDamage(float damage, Vector3 knockbackDir, float knockbackStrength, float knockbackTime)
     {
+        FindObjectOfType<EnemyAudio>().PlayHurtSound();
         health -= damage;
         if(health <= 0f)
         {
+            //Handle enemy death
+            var dropper = GetComponent<PowerupDropper>();
+            if (dropper)
+            {
+                dropper.DropPickup();
+            }
             Instantiate(deathVFX, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }

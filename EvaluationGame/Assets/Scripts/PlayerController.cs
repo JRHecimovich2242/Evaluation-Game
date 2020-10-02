@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     //Cached component references
     Rigidbody2D _myRigidbody;
+    AudioSource _myAudioSource;
 
 
     //
@@ -21,8 +22,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int _maxAmmo = 30;
     private int _currentAmmo = 0;
     [SerializeField] bool _tripleshotActive = false;
-    [SerializeField] int _maxTripleshotAmmo = 30;
-    private int _currentTripleshotAmmo = 0;
     [SerializeField] int _tripleshotAngle = 30;
     [SerializeField] float reloadTime = 2f;
     [SerializeField] bool _reloading = false;
@@ -37,11 +36,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject gunBarrel;
     [SerializeField] Rigidbody2D projectile;
     [SerializeField] ParticleSystem hurtParticles;
+    [SerializeField] AudioClip gunSound;
+    [SerializeField] AudioClip hurtNoise;
+    [SerializeField] AudioClip pickupNoise;
     // Start is called before the first frame update
     void Start()
     {
         _health = _maxHealth;
         _myRigidbody = GetComponent<Rigidbody2D>();
+        _myAudioSource = GetComponent<AudioSource>();
         _currentAmmo = _maxAmmo;
     }
     void FixedUpdate()
@@ -84,11 +87,11 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-
         if(_currentAmmo > 0)
         {
             if (Time.time - _shotTime >= shootingCooldown)
             {
+                _myAudioSource.PlayOneShot(gunSound);
                 _currentAmmo--;
                 _shotTime = Time.time;
                 Rigidbody2D bullet = Instantiate(projectile, gunBarrel.transform.position, Quaternion.identity) as Rigidbody2D;
@@ -119,6 +122,7 @@ public class PlayerController : MonoBehaviour
         if (_hitboxActive)
         {
             _health -= damage;
+            _myAudioSource.PlayOneShot(hurtNoise);
             Instantiate(hurtParticles, transform.position, Quaternion.identity);
             if (_health <= 0)
             {
@@ -126,9 +130,9 @@ public class PlayerController : MonoBehaviour
                 //GAME OVER
                 FindObjectOfType<GameSession>().EndGame();
             }
-            //_myRigidbody.AddForce(knockbackDir * knockbackStrength);
             //_stunTime = Time.time;
             //_stunDuration = knockbackTime;
+            //_myRigidbody.AddForce(-knockbackDir * knockbackStrength);
             StartCoroutine(DisableHurt());
         }
     }
@@ -181,11 +185,13 @@ public class PlayerController : MonoBehaviour
     {
         _tripleshotActive = true;
         _currentAmmo = _maxAmmo;
+        _myAudioSource.PlayOneShot(pickupNoise);
     }
 
     public void IncreaseMaxAmmo(int pickupValue)
     {
         _maxAmmo += pickupValue;
+        _myAudioSource.PlayOneShot(pickupNoise);
     }
 
     public void RestoreHealth(float pickupValue)
@@ -193,7 +199,9 @@ public class PlayerController : MonoBehaviour
         _health += pickupValue;
         if(_health > _maxHealth)
         {
+            _maxHealth += pickupValue / 4;
             _health = _maxHealth;
         }
+        _myAudioSource.PlayOneShot(pickupNoise);
     }
 }
