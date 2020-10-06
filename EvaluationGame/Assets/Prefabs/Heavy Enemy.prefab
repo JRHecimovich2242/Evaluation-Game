@@ -67,7 +67,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 445859739
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b02ec76d9ff897f46b75836d2f06dd02, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
@@ -200,7 +200,6 @@ MonoBehaviour:
   attackCooldown: 1
   deathVFX: {fileID: 8826925166968677894, guid: 79cc04dc2f6f3c94abb1de20871b6cb5,
     type: 3}
-  hurtNoise: {fileID: 8300000, guid: ca272c577d1f34d47889239e2ce86ea1, type: 3}
   knockbackScale: 0.5
 --- !u!114 &1912270316204246881
 MonoBehaviour:
@@ -216,12 +215,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPickupPrefab: {fileID: 5082291916799063522, guid: 4363305dc1afacf44bcad17dd220a82f,
     type: 3}
-  ammoPickupPrefab: {fileID: 8820636598833838827, guid: 9848ec101266cde4283c9a5a37be82bd,
+  coinPrefab: {fileID: 3732338585835539864, guid: 32d3bccc68533c14d96f61275c68f829,
     type: 3}
   tripleshotPickupPrefab: {fileID: 4976811722785280885, guid: 1bfccf9c60f61e24fab550aed491dbaf,
     type: 3}
   percentChanceHealthDrop: 10
-  percentChanceAmmoDrop: 20
+  percentChanceCoinDrop: 10
   percentChanceTripleshotDrop: 30
 --- !u!82 &-3433075723010479188
 AudioSource:

@@ -13,6 +13,7 @@ public class UpdateScoreText : MonoBehaviour
     {
         _gameSession = FindObjectOfType<GameSession>();
         _scoreText = GetComponent<Text>();
+        
     }
 
     // Update is called once per frame

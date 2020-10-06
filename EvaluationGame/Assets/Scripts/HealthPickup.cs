@@ -9,7 +9,7 @@ public class HealthPickup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Destroy(gameObject, despawnDelay);
     }
 
     // Update is called once per frame
@@ -21,11 +21,11 @@ public class HealthPickup : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         GameObject other = collision.gameObject;
-        Debug.Log("Ammo pickup");
+        //Debug.Log("Ammo pickup");
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().RestoreHealth(pickupValue);
-            Destroy(gameObject, despawnDelay);
+            Destroy(gameObject);
         }
     }
 

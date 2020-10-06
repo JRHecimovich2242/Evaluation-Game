@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4021404123494162154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4021404123494162156}
+  - component: {fileID: 4021404123494162155}
+  m_Layer: 0
+  m_Name: Wave Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4021404123494162156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4021404123494162154}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4021404123494162155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4021404123494162154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a010a58921abb264fa1fec63ae962018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnpointParent: {fileID: 8279891406504867701, guid: 10e780e11b3bab944b2fdb689682387a,
+    type: 3}
+  premadeEnemyWaves:
+  - {fileID: 11400000, guid: 0e24a6eaddd963848abed9d5e117b1ef, type: 2}
+  - {fileID: 11400000, guid: a9367c4a337e86c4098d6097ac310202, type: 2}
+  - {fileID: 11400000, guid: 9edc5678a8631254f9b7b3bc485ecbac, type: 2}
+  - {fileID: 11400000, guid: 1b1c92c0a414794489ee68bfab078a25, type: 2}
+  - {fileID: 11400000, guid: b64c7cb97e1c70847aa96fbc1a531a58, type: 2}
+  - {fileID: 11400000, guid: 6811da1ec45876043bc53045edb7a292, type: 2}
+  - {fileID: 11400000, guid: e3f03537ea8ad9744b04fa5ba6012678, type: 2}
+  - {fileID: 11400000, guid: 43ce1f3909727114390044c8999518e4, type: 2}
+  - {fileID: 11400000, guid: 669e2d2db4ef008479b52098a503537d, type: 2}
+  - {fileID: 11400000, guid: d57f2c31f9cda884c95b76f6889b4f24, type: 2}
+  - {fileID: 11400000, guid: 065f284548a22c2449f5ad12fcf33adc, type: 2}
+  fiveEnemyWave: {fileID: 11400000, guid: 2724399904a6f4a4c9547869cf36bde3, type: 2}
+  oneHeavyEnemy: {fileID: 11400000, guid: f439ce7925700364eb58fd7ea6ce81c0, type: 2}
+  fiveFastEnemies: {fileID: 11400000, guid: 61c171080ec90294792513a74c2a800b, type: 2}
+  _currentWave: 0
+  _waveActive: 0
+  GameActive: 0
+  delayBetweenWaves: 5
+  _specialWaveChance: 10
+  shopCounter: 0

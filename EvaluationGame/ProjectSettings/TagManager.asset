@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Projectile
   - Environment
+  - Gun Upgrade
   layers:
   - Default
   - TransparentFX
@@ -47,6 +48,12 @@ TagManager:
   - name: Environment
     uniqueID: 32655291
     locked: 0
+  - name: Particles
+    uniqueID: 4082439615
+    locked: 0
+  - name: Pickups
+    uniqueID: 330222163
+    locked: 0
   - name: Enemies
     uniqueID: 445859739
     locked: 0
@@ -55,7 +62,4 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3779889963
-    locked: 0
-  - name: New Layer
-    uniqueID: 4082439615
     locked: 0

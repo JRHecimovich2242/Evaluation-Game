@@ -7,33 +7,24 @@ public class WaveManager : MonoBehaviour
 
     [SerializeField] GameObject spawnpointParent;
     [SerializeField] List<WaveConfig> premadeEnemyWaves;
-    [SerializeField] List<WaveConfig> specialEnemyWaves;
-    [SerializeField] WaveConfig tenEnemyWave;
     [SerializeField] WaveConfig fiveEnemyWave;
     [SerializeField] WaveConfig oneHeavyEnemy;
     [SerializeField] WaveConfig fiveFastEnemies;
 
 
     private List<Transform> _spawnpoints;
-    //private int _lastUsedSpawnpoint = -1;
-    [SerializeField] int _activeWaves = 0;
-    [SerializeField] int _waveIndex = 9;
-    private int _numPremadeWaves = 0;
-    private int _numSpecialWaves = 0;
-    [SerializeField] int _targetNumEnemies = 10;
-    [SerializeField] int _spawnedEnemies = 0;
+    [SerializeField] int _currentWave = 0;
+    public int _numPremadeWaves = 0;
     [SerializeField] bool _waveActive = false;
-    private bool _cooldownActive = false;
-    [SerializeField] bool _spawning = false;
-    private float heavyWaveStartTime = 0f;
-    private float heavyWaveCooldown = 30f;
-    private float fastWaveStartTime = 0f;
-    private float fastWaveCooldown = 30f;
-    private int _maxEnemiesOnScreen = 10;
+    private int _difficultyMultiplier = 1;
     public bool GameActive = false;
-    [SerializeField] int allowedActiveWaves = 1;
     [SerializeField] float delayBetweenWaves = 5f;
-    [SerializeField] int waveLoops = 0;
+    private bool _coroutineActive = false;
+    private int _difficultyIncrement = 0;
+    [Tooltip("Once preset waves have been exhausted, the chance of spawning special enemies is one in _specialWaveChance - 1")]
+    [SerializeField] int _specialWaveChance = 10;
+    [SerializeField] int shopCounter = 0;
+    [SerializeField] int shopEveryXWaves = 5;
 
     private GameSession _gameSession;
     // Start is called before the first frame update
@@ -43,30 +34,28 @@ public class WaveManager : MonoBehaviour
         _gameSession = FindObjectOfType<GameSession>();
         _spawnpoints = GetSpawnpoints();
         _numPremadeWaves = premadeEnemyWaves.Count;
-        _numSpecialWaves = specialEnemyWaves.Count;
+        Debug.Log(_numPremadeWaves);
         _gameSession.StartGame();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameActive)
+        if (shopCounter >= shopEveryXWaves && transform.childCount == 0)
         {
-            if (_waveIndex < _numPremadeWaves)
+            //Run suspension for store
+            SuspendGame();
+        }
+        if (GameActive && shopCounter <= shopEveryXWaves)
+        {
+            if (_currentWave < _numPremadeWaves)
             {
                 RunPremadeWaves();
             }
             else
             {
-                //Debug.Log("Out of intro waves");
-                //BEFORE YOU START TRYING TO MAKE SPECIAL ENEMIES AND WAVES, MAKE SURE THE GAME WORKS WITH JUST BASIC ENEMIES AND WEAPONS. 
-                //Want to run waves incrementing by 5 enemies each time (Will this be too hard?)
-                //If we want to spawn 20 enemies, we spawn waves of 10 twice
-                //Sprinkle in some special enemy waves too
-                //RunDynamicWaves();
-                _waveIndex = 0;
-                waveLoops++;
-
+                //Start running repeat waves
+                RunRandomWaves();
             }
         }
         else if(_waveActive && !GameActive)
@@ -76,39 +65,52 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    //Runs the premade wave in the list of premade waves at index _waveIndex
     private void RunPremadeWaves()
     {
         if (!_waveActive)
         {
-            StartWave(premadeEnemyWaves[_waveIndex]);
+            StartWave(premadeEnemyWaves[_currentWave]);
+            _currentWave++;
         }
     }
 
-    private void RunDynamicWaves()
+    //Once all premade waves have been exhausted, RunRandomWaves regularly runs five enemy waves, and multiplies the number of enemies as time passes.
+    private void RunRandomWaves()
     {
-        //OriginalRunDynamicWaves();
-        if (gameObject.transform.childCount <= _maxEnemiesOnScreen)
+        if (!_waveActive)
         {
-            if (!_spawning)
+            //Debug.Log("Running a random wave");
+            _currentWave++;
+            _difficultyIncrement++;
+            StartWave(fiveEnemyWave, _difficultyMultiplier);
+            //Debug.Log("Spawning " + _difficultyMultiplier.ToString() + " Five enemy waves");
+            int randFactor = Random.Range(0, _specialWaveChance);
+            //Debug.Log(randFactor);
+            if (randFactor == 1)
             {
-                StartWave(fiveEnemyWave);
+                StartWave(fiveFastEnemies, _difficultyMultiplier - 1);
+                //Debug.Log("Spawning " + (_difficultyMultiplier - 1).ToString() + " Five fast enemy waves");
             }
-            int roll = Random.Range(0, 10);
-            if (roll <= 2 && Time.time - heavyWaveStartTime >= heavyWaveCooldown)
+            else if (randFactor == 0)
             {
-                heavyWaveStartTime = Time.time;
-                StartWave(oneHeavyEnemy);
+                StartWave(oneHeavyEnemy, _difficultyMultiplier);
+                //Debug.Log("Spawning " + _difficultyMultiplier.ToString() + " One Heavy enemy waves");
             }
-            else if (roll >= 7 && Time.time - fastWaveStartTime >= fastWaveCooldown)
+        }
+        if(_difficultyIncrement == 5)
+        {
+            _difficultyMultiplier++;
+            _difficultyIncrement = 0;
+            if(_specialWaveChance > 2)
             {
-                fastWaveStartTime = Time.time;
-                StartWave(fiveFastEnemies);
+                _specialWaveChance--;
             }
         }
     }
 
    
-
+    //Adds all spawnpoints to a list for easy reference
     private List<Transform> GetSpawnpoints()
     {
         var spawnpoints = new List<Transform>();
@@ -119,38 +121,25 @@ public class WaveManager : MonoBehaviour
         return spawnpoints;
     }
 
+    //Starts the given wave
     public void StartWave(WaveConfig enemyWave)
     {
-        _waveIndex++;
-        _spawning = true;
         //Debug.Log("Starting a wave");
-        _activeWaves++;
         _waveActive = true;
-        _gameSession.UpdateCurrentWave(_waveIndex);
+        _gameSession.UpdateCurrentWave(_currentWave);
         StartCoroutine(SpawnEnemiesInWave(enemyWave));
-        if (enemyWave.GetIsSpecialWave())
-        {
-            if(waveLoops > 0)
-            {
-                //After first loop we want to start piling regular enemies on top of special enemies
-                StartCoroutine(SpawnEnemiesInWave(fiveEnemyWave));
-            }
-            
-        }
     }
 
-    public void StartWave(WaveConfig waveConfig, WaveConfig specialWave)
+    //Starts the given wave, also takes a spawnMultiplier to be passed to SpawnEnemiesInWave
+    public void StartWave(WaveConfig enemyWave, int spawnMultiplier)
     {
-
+        //Debug.Log("Starting a wave");
+        _waveActive = true;
+        _gameSession.UpdateCurrentWave(_currentWave);
+        StartCoroutine(SpawnEnemiesInWave(enemyWave, spawnMultiplier));
     }
 
-    public void EndWave()
-    {
-        //We can instantiate all enemies as a child of the WaveManager or GameManager.
-        //Hopefully there is a constant time operation to check for children of a gameObject
-        //If no children, end wave
-    }
-
+    //Spawns all enemies in the given waveConfig based on its parameters
     private IEnumerator SpawnEnemiesInWave(WaveConfig waveConfig)
     {
         //Debug.Log("Booling");
@@ -164,72 +153,67 @@ public class WaveManager : MonoBehaviour
                                     Quaternion.identity);
             enemy.transform.parent = gameObject.transform;
             //Debug.Log("BOOLING");
-            _spawnedEnemies++;
             yield return new WaitForSeconds(waveConfig.GetTimeBetweenSpawns() + Random.Range(-waveConfig.GetRandomSpawnOffset(), 
                                                                                                 waveConfig.GetRandomSpawnOffset()));
         }
-        _spawning = false;
-        _cooldownActive = true;
         StartCoroutine(WaveCooldown());
     }
 
-    //Maybe make an overload for SpawnEnemiesInWave that takes the WaveConfig and a delay float. We only need one spawn coroutine because we can have multiple waves spawning at once
-    //With a delay float, we can have either overlapping waves OR two waves at once where the second wave is scattered.
-
-    private IEnumerator SpawnEnemiesInWave(WaveConfig standardWave, WaveConfig specialWave)
+    //Spawns all enemies in the given waveConfig spawnMultiplier times
+    private IEnumerator SpawnEnemiesInWave(WaveConfig waveConfig, int spawnMultiplier)
     {
         for (int enemiesSpawned = 0;
-            enemiesSpawned < (standardWave.GetNumberOfEnemies() + specialWave.GetNumberOfEnemies());
+            enemiesSpawned < (waveConfig.GetNumberOfEnemies() * spawnMultiplier);
             enemiesSpawned++)
         {
-            var enemy = Instantiate(standardWave.GetEnemyPrefab(),
+            //Debug.Log("Spawning an enemy");
+            var enemy = Instantiate(waveConfig.GetEnemyPrefab(),
                                     _spawnpoints[FindRandomSpawnpointIndex()].transform.position,
                                     Quaternion.identity);
             enemy.transform.parent = gameObject.transform;
-
-            yield return new WaitForSeconds(standardWave.GetTimeBetweenSpawns() + Random.Range(-standardWave.GetRandomSpawnOffset(),
-                                                                                                standardWave.GetRandomSpawnOffset()));
+            yield return new WaitForSeconds(waveConfig.GetTimeBetweenSpawns() + Random.Range(-waveConfig.GetRandomSpawnOffset(),
+                                                                                                waveConfig.GetRandomSpawnOffset()));
         }
+        StartCoroutine(WaveCooldown());
     }
 
+    //Randomly selects one of the spawnpoints to instantiate the current enemy
     private int FindRandomSpawnpointIndex()
     {
         return Random.Range(0, _spawnpoints.Count);
     }
 
+    //Once a wave has finished, WaveCooldown begins a timer until the next set of waves can begin
     private IEnumerator WaveCooldown()
     {
-        yield return new WaitForSeconds(delayBetweenWaves);
-        _waveActive = false;
-        _activeWaves = 0;
-        _cooldownActive = false;
-        //_gameSession.UpdateCurrentWave(_waveIndex);
-        _spawnedEnemies = 0;
+        //Only allow one cooldown coroutine to be active at a time
+        if (!_coroutineActive)
+        {
+            
+            _coroutineActive = true;
+            yield return new WaitForSeconds(delayBetweenWaves);
+            //_gameSession.UpdateCurrentWave(_waveIndex);
+            _coroutineActive = false;
+            shopCounter++;
+            if (shopCounter <= shopEveryXWaves)
+            {
+                _waveActive = false;
+            }
+            
+        }
     }
 
-    private void OriginalRunDynamicWaves()
+    private void SuspendGame()
     {
-        //Debug.Log("Zoom");
-        if (_waveActive)
-        {
-            if (gameObject.transform.childCount == 0 && !_cooldownActive && (_spawnedEnemies >= _targetNumEnemies))
-            {
-                Debug.Log("Trying to cooldown");
-                _cooldownActive = true;
-                StartCoroutine(WaveCooldown());
-            }
-        }
-        if (_activeWaves == 0 || _activeWaves < allowedActiveWaves)
-        {
-            Debug.Log("Trying to spawn");
-            allowedActiveWaves = _targetNumEnemies / 5;
-            if (_spawnedEnemies < _targetNumEnemies && !_spawning)
-            {
-                Debug.Log("Start this wave");
-                StartWave(fiveEnemyWave);
-                Debug.Log(_spawnedEnemies);
+        GameActive = false;
+        _gameSession.SuspendGame();
+        shopCounter = 0;
 
-            }
-        }
+    }
+
+    public void ResumeGame()
+    {
+        GameActive = true;
+        _waveActive = false;
     }
 }

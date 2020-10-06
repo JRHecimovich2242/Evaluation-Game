@@ -30,12 +30,12 @@ public class MinigunProjectile : MonoBehaviour
         GameObject other = collision.gameObject;
         if(other.CompareTag("Enemy"))
         {
-            Debug.Log("Shot enemy");
+            //Debug.Log("Shot enemy");
             moveDirection.Normalize();
-            Debug.Log("oo");
+            //Debug.Log("oo");
             other.GetComponent<EnemyController>().TakeDamage(damage, moveDirection, knockbackStrength, knockbackTime);
             //Instantiate(shrapnel);
-            Debug.Log("Ayyy");
+            //Debug.Log("Ayyy");
             Destroy(this.gameObject);
         }
         else if(collision.tag == "Environment")

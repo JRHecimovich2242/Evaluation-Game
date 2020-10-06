@@ -20,3 +20,4 @@ MonoBehaviour:
   randomSpawnOffset: 0.3
   numEnemies: 1
   startDelay: 0
+  isSpecialWave: 0

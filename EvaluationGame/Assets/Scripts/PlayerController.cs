@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     //Cached component references
     Rigidbody2D _myRigidbody;
     AudioSource _myAudioSource;
-
+    BoxCollider2D _myBoxCollider;
 
     //
     private Vector2 _moveInput;
@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     private float _stunDuration = 0f;
     private bool _isAlive = true;
     private bool _hitboxActive = true;
+    private bool _dashing = false;
+    public bool InShop = false;
+    //private float _dashStartTime = 0f;
     [SerializeField] int _maxAmmo = 30;
     private int _currentAmmo = 0;
     [SerializeField] bool _tripleshotActive = false;
@@ -30,6 +33,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _maxHealth = 100f;
     private float _health = 0f;
     [SerializeField] float moveSpeed = 1f;
+    [SerializeField] float moveLimiter = 0.7f;
+    //[SerializeField] float dashSpeed = 2f;
+    //[SerializeField] float dashDuration = .25f;
+    //[SerializeField] float dashCooldown = 5f;
     [SerializeField] float bulletSpeed = 5f;
     [SerializeField] float shootingCooldown = .5f;
     [SerializeField] float damageCooldown = 1f;
@@ -39,21 +46,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip gunSound;
     [SerializeField] AudioClip hurtNoise;
     [SerializeField] AudioClip pickupNoise;
+    [SerializeField] AudioClip reloadSound;
     // Start is called before the first frame update
     void Start()
     {
         _health = _maxHealth;
         _myRigidbody = GetComponent<Rigidbody2D>();
         _myAudioSource = GetComponent<AudioSource>();
+        _myBoxCollider = GetComponent<BoxCollider2D>();
         _currentAmmo = _maxAmmo;
     }
     void FixedUpdate()
     {
         if (_isAlive)
         {
-            if (Time.time - _stunTime >= _stunDuration)
+            if (Time.time - _stunTime >= _stunDuration && !InShop)
             {
                 Move();
+            }
+            else if (InShop)
+            {
+                _myRigidbody.velocity = Vector2.zero;
             }
         }
     }
@@ -64,17 +77,39 @@ public class PlayerController : MonoBehaviour
         if (_isAlive)
         {
             FaceCursor();
-            if (Input.GetKey(KeyCode.Mouse0) && !_reloading)
+            if (Input.GetKey(KeyCode.Mouse0) && !_reloading && !InShop)
             {
                 Shoot();
+            }
+            if (Input.GetKeyDown(KeyCode.R) && !_reloading && !InShop)
+            {
+                StartCoroutine(Reload());
             }
         }
     }
 
     private void Move()
     {
-        _myRigidbody.velocity = new Vector2((Input.GetAxis("Horizontal") * moveSpeed), (Input.GetAxis("Vertical") * moveSpeed));
+        float yInput = Input.GetAxisRaw("Vertical");
+        float xInput = Input.GetAxisRaw("Horizontal");
+        if (xInput != 0 && yInput != 0)
+        {
+            xInput *= moveLimiter;
+            yInput *= moveLimiter;
+        }
+        _myRigidbody.velocity = new Vector2((xInput * moveSpeed), (yInput * moveSpeed));
+        
     }
+    /*
+    IEnumerator Dash()
+    {
+        _dashing = true;
+        _dashStartTime = Time.time;
+        _myRigidbody.velocity = new Vector2((Input.GetAxis("Horizontal") * dashSpeed), (Input.GetAxis("Vertical") *  dashSpeed));
+        yield return new WaitForSeconds(dashDuration);
+        _dashing = false;
+    }
+    */
 
     private void FaceCursor()
     {
@@ -119,7 +154,7 @@ public class PlayerController : MonoBehaviour
     //knockbackDir is a normalized Vector3 representing the unit vector originating from the damaging entity and pointing towards the player
     public void TakeDamage(float damage, Vector3 knockbackDir, float knockbackStrength, float knockbackTime)
     {
-        if (_hitboxActive)
+        if (_hitboxActive && !_dashing)
         {
             _health -= damage;
             _myAudioSource.PlayOneShot(hurtNoise);
@@ -129,6 +164,7 @@ public class PlayerController : MonoBehaviour
                 _isAlive = false;
                 //GAME OVER
                 FindObjectOfType<GameSession>().EndGame();
+                _myRigidbody.velocity = Vector2.zero;
             }
             //_stunTime = Time.time;
             //_stunDuration = knockbackTime;
@@ -144,9 +180,13 @@ public class PlayerController : MonoBehaviour
         _hitboxActive = true;
     }
 
-    public void UpdateFireRate(float newFiringDelay)
+    public void UpdateFireRate()
     {
-        shootingCooldown = newFiringDelay;
+        shootingCooldown *= .9f;
+        if(shootingCooldown <= 0)
+        {
+            shootingCooldown = .1f;
+        }
     }
 
     private Vector3 RotateVector(Vector3 vect, int angle)
@@ -174,6 +214,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Reload()
     {
+        _myAudioSource.PlayOneShot(reloadSound);
         _reloading = true;
         yield return new WaitForSeconds(reloadTime);
         _tripleshotActive = false;
@@ -188,20 +229,33 @@ public class PlayerController : MonoBehaviour
         _myAudioSource.PlayOneShot(pickupNoise);
     }
 
+    //Increase maxAmmo by pickupValue
     public void IncreaseMaxAmmo(int pickupValue)
     {
         _maxAmmo += pickupValue;
         _myAudioSource.PlayOneShot(pickupNoise);
     }
 
+    //Restore health by pickupValue
     public void RestoreHealth(float pickupValue)
     {
         _health += pickupValue;
         if(_health > _maxHealth)
         {
-            _maxHealth += pickupValue / 4;
             _health = _maxHealth;
         }
+        _myAudioSource.PlayOneShot(pickupNoise);
+    }
+
+    public void IncreaseMaxHealth(float upgradeValue)
+    {
+        _maxHealth += upgradeValue;
+        _myAudioSource.PlayOneShot(pickupNoise);
+    }
+
+    public void PlayPickupNoise()
+    {
+        _myAudioSource.PlayOneShot(pickupNoise);
         _myAudioSource.PlayOneShot(pickupNoise);
     }
 }

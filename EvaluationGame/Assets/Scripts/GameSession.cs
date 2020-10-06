@@ -5,12 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class GameSession : MonoBehaviour
 {
-    private WaveManager _waveManager; 
+    private WaveManager _waveManager;
+    private StoreManager _storeManager;
 
     private float _gameStartTime = 0f;
     private int _activeGameTime = 0;
     private int _currentWave = 0;
     private bool _gameActive = false;
+    private int _currency = 0;
+    private float _timePaused = 0f;
+    private int highscore = 0;
 
     private void Awake()
     {
@@ -20,8 +24,13 @@ public class GameSession : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Starting game Session");
+        //Debug.Log("Starting game Session");
         _waveManager = FindObjectOfType<WaveManager>();
+        _storeManager = FindObjectOfType<StoreManager>();
+        //if (_storeManager)
+        //{
+        //    Debug.Log("Found store Manager");
+        //}
         //Debug.Log(_waveManager.name);
         //Time.timeScale = 0;
     }
@@ -31,7 +40,10 @@ public class GameSession : MonoBehaviour
     {
         if (_gameActive)
         {
-            _activeGameTime = (int)(Time.time - _gameStartTime);
+            _activeGameTime = (int)(Time.time - _gameStartTime - _timePaused);
+        }
+        else{
+            _timePaused += Time.deltaTime;
         }
     }
 
@@ -75,7 +87,7 @@ public class GameSession : MonoBehaviour
 
     public void ResetGame()
     {
-        Debug.Log("Heyu");
+        //Debug.Log("Resetting");
         Destroy(gameObject);
     }
 
@@ -84,6 +96,10 @@ public class GameSession : MonoBehaviour
         Time.timeScale = .7f;
         _waveManager.enabled = false;
         _gameActive = false;
+        if(GetScore() > PlayerPrefs.GetInt("highscore"))
+        {
+            PlayerPrefs.SetInt("highscore", GetScore());
+        }
         StartCoroutine(LoadGameOver());
 
     }
@@ -92,5 +108,43 @@ public class GameSession : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Time.timeScale = 1f;
         SceneManager.LoadScene(2);
+    }
+
+    public void IncreaseCurrency(int enemyValue)
+    {
+        //Should currency be from killing enemies or from dropped coins?
+        _currency += enemyValue;
+    }
+
+    public bool SpendCurrency(int upgradeValue)
+    {
+        if (_currency - upgradeValue >= 0)
+        {
+            _currency -= upgradeValue;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public int GetCurrency()
+    {
+        return _currency;
+    }
+
+    public void SuspendGame()
+    {
+        _storeManager.EnableStoreUI();
+        _gameActive = false;
+        FindObjectOfType<PlayerController>().InShop = true;
+    }
+
+    public void ResumeGame()
+    {
+        _waveManager.ResumeGame();
+        _gameActive = true;
+        FindObjectOfType<PlayerController>().InShop = false;
     }
 }

@@ -5,34 +5,35 @@ using UnityEngine;
 public class PowerupDropper : MonoBehaviour
 {
     [SerializeField] HealthPickup healthPickupPrefab;
-    [SerializeField] AmmoPickup ammoPickupPrefab;
+    [SerializeField] CurrencyCoin coinPrefab;
     [SerializeField] TripleshotPickup tripleshotPickupPrefab;
     [SerializeField] int percentChanceHealthDrop = 30;
-    [SerializeField] int percentChanceAmmoDrop = 30;
+    [SerializeField] int percentChanceCoinDrop = 30;
     [SerializeField] int percentChanceTripleshotDrop = 30;
     private int healthLowerBound = 0;
     private int healthUpperBound = 30;
-    private int ammoLowerBound = 31;
-    private int ammoUpperBound = 50;
+    private int coinLowerBound = 31;
+    private int coinUpperBound = 50;
     private int tripleshotLowerBound = 51;
     private int tripleshotUpperBound = 60;
 
     // Start is called before the first frame update
     void Start()
     {
-        if(percentChanceAmmoDrop + percentChanceHealthDrop + percentChanceTripleshotDrop > 100)
+        if(percentChanceCoinDrop + percentChanceHealthDrop + percentChanceTripleshotDrop > 100)
         {
+            //If the set drop chances are incompatible, set them to some preset values
             Debug.LogError("Drop chances cannot sum to be greater than 100");
             percentChanceHealthDrop = 30;
-            percentChanceAmmoDrop = 20;
+            percentChanceCoinDrop = 20;
             percentChanceTripleshotDrop = 10;
         }
         healthLowerBound = 0;
         healthUpperBound = percentChanceHealthDrop;
-        ammoLowerBound = percentChanceHealthDrop + 1;
-        ammoUpperBound = percentChanceHealthDrop + percentChanceAmmoDrop;
-        tripleshotLowerBound = ammoUpperBound + 1;
-        tripleshotUpperBound = ammoUpperBound + percentChanceTripleshotDrop;
+        coinLowerBound = percentChanceHealthDrop + 1;
+        coinUpperBound = percentChanceHealthDrop + percentChanceCoinDrop;
+        tripleshotLowerBound = coinUpperBound + 1;
+        tripleshotUpperBound = coinUpperBound + percentChanceTripleshotDrop;
     }
 
     // Update is called once per frame
@@ -43,16 +44,16 @@ public class PowerupDropper : MonoBehaviour
 
     public void DropPickup()
     {
-        int randNum = Random.Range(0, 100);
+        int randNum = Random.Range(0, 101);
         if (healthLowerBound <= randNum && randNum <= healthUpperBound)
         {
             //Drop ammo pickuo
             Instantiate(healthPickupPrefab, this.transform.position, Quaternion.identity);
         }
-        else if (ammoLowerBound <= randNum && randNum <= ammoUpperBound)
+        else if (coinLowerBound <= randNum && randNum <= coinUpperBound)
         {
             //Drop health pickup
-            Instantiate(ammoPickupPrefab, this.transform.position, Quaternion.identity);
+            Instantiate(coinPrefab, this.transform.position, Quaternion.identity);
         }
         else if (tripleshotLowerBound <= randNum && randNum <= tripleshotUpperBound)
         {

@@ -57,6 +57,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    //Determines a vector towards the player and sets velocity along that vector
     private void MoveTowardsPlayer()
     {
         vectorToPlayer = _playerController.transform.position - transform.position;
@@ -80,6 +81,7 @@ public class EnemyController : MonoBehaviour
             {
                 dropper.DropPickup();
             }
+            
             Instantiate(deathVFX, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
