@@ -776,9 +776,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab655ad8b5dfee4d8b0dafa278367f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthUpgradeCost: 10
-  _ammoUpgradeCost: 10
-  _gunUpgradeCost: 10
+  _healthUpgradeCost: 5
+  _ammoUpgradeCost: 5
+  _gunUpgradeCost: 5
   _ammoUpgradeValue: 5
   _healthUpgradeValue: 10
 --- !u!1 &1085029606

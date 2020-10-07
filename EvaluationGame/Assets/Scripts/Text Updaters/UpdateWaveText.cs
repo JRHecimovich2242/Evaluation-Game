@@ -23,6 +23,6 @@ public class UpdateWaveText : MonoBehaviour
 
     private void UpdateWave()
     {
-        _waveText.text = _gameSession.GetWave().ToString();
+        _waveText.text = (_gameSession.GetWave() + 1).ToString();
     }
 }
