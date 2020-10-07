@@ -8,7 +8,6 @@ public class UpdateHealthCost : MonoBehaviour
     private Text _healthText;
     private StoreManager _storeManager;
     public bool Active = false;
-    private int upgradeCost = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +18,13 @@ public class UpdateHealthCost : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateCostText();
+    }
+
+    private void UpdateCostText()
+    {
         if (Active)
         {
-            
             _healthText.text = _storeManager.GetHealthUpgradeCost().ToString() + " Coins";
         }
     }

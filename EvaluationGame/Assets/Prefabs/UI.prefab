@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 388031378}
   m_Layer: 5
   m_Name: Fire Rate Cost Text
-  m_TagString: Untagged
+  m_TagString: Gun Upgrade
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -776,11 +776,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab655ad8b5dfee4d8b0dafa278367f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthUpgradeCost: 10
-  ammoUpgradeCost: 10
-  gunUpgradeCost: 10
-  ammoUpgradeValue: 5
-  healthUpgradeValue: 10
+  _healthUpgradeCost: 10
+  _ammoUpgradeCost: 10
+  _gunUpgradeCost: 10
+  _ammoUpgradeValue: 5
+  _healthUpgradeValue: 10
 --- !u!1 &1085029606
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,7 +962,7 @@ GameObject:
   - component: {fileID: 1448468655}
   m_Layer: 5
   m_Name: Gun Upgrade Button
-  m_TagString: Untagged
+  m_TagString: Gun Upgrade
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1918,7 +1918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -81.5, y: -53.8}
+  m_AnchoredPosition: {x: -81.5, y: -53.80005}
   m_SizeDelta: {x: 158.2, y: 46.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4486322686846178241
@@ -2128,7 +2128,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -92, y: -13.299988}
+  m_AnchoredPosition: {x: -92, y: -13.300049}
   m_SizeDelta: {x: 173.29999, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4486322687087520910
@@ -2297,8 +2297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd283e6a3a63f94090e04f89ddd9a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 4486322686177998198}
-  healthBarWidth: 0
-  healthBarSmooth: 0
-  healthBarSmoothEase: 10
+  _healthBar: {fileID: 4486322686177998198}
+  _healthBarWidth: 0
+  _healthBarSmooth: 0
+  _healthBarSmoothEase: 1
   ammoCountText: {fileID: 4486322685920904969}

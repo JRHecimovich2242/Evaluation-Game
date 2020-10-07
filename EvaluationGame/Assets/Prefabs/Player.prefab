@@ -210,23 +210,23 @@ MonoBehaviour:
   _maxAmmo: 30
   _tripleshotActive: 0
   _tripleshotAngle: 30
-  reloadTime: 2
+  _reloadTime: 1.5
   _reloading: 0
   _maxHealth: 100
-  moveSpeed: 8
-  moveLimiter: 0.7
-  bulletSpeed: 5
-  shootingCooldown: 0.25
-  damageCooldown: 1
-  gunBarrel: {fileID: 8740856319019829415}
-  projectile: {fileID: 8068932189387214357, guid: fad8fd28292b4a9449b51ab39d95c9b0,
+  _moveSpeed: 3.5
+  _moveLimiter: 0.7
+  _bulletSpeed: 6
+  _shootingCooldown: 0.5
+  _damageCooldown: 1
+  _gunBarrel: {fileID: 8740856319019829415}
+  _projectile: {fileID: 8068932189387214357, guid: fad8fd28292b4a9449b51ab39d95c9b0,
     type: 3}
-  hurtParticles: {fileID: 8826925166968677894, guid: 8c34a8cc4c9eee745823602b3f332d74,
+  _hurtParticles: {fileID: 8826925166968677894, guid: 0ad21ad3a57e25141b6c602c24964595,
     type: 3}
-  gunSound: {fileID: 8300000, guid: 072931008c6106b41b4929ae6c0d501d, type: 3}
-  hurtNoise: {fileID: 8300000, guid: d3ba490c80946f0419addfa1725bb49f, type: 3}
-  pickupNoise: {fileID: 8300000, guid: c3b68140ee8ed134cb8c20a3b928222a, type: 3}
-  reloadSound: {fileID: 0}
+  _gunSound: {fileID: 8300000, guid: 072931008c6106b41b4929ae6c0d501d, type: 3}
+  _hurtNoise: {fileID: 8300000, guid: d3ba490c80946f0419addfa1725bb49f, type: 3}
+  _pickupNoise: {fileID: 8300000, guid: c3b68140ee8ed134cb8c20a3b928222a, type: 3}
+  _reloadSound: {fileID: 8300000, guid: 1c99d481d50a0db4ea0e22c70d3a7c1a, type: 3}
 --- !u!82 &4162629942905073104
 AudioSource:
   m_ObjectHideFlags: 0

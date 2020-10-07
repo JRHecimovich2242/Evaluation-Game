@@ -6,22 +6,27 @@ using UnityEngine.UI;
 public class UpdateAmmoCost : MonoBehaviour
 {
 
-    private Text _ammoText;
+    private Text _ammoCostText;
     private StoreManager _storeManager;
     public bool Active = false;
     // Start is called before the first frame update
     void Start()
     {
-        _ammoText = GetComponent<Text>();
+        _ammoCostText = GetComponent<Text>();
         _storeManager = FindObjectOfType<StoreManager>().GetComponent<StoreManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        UpdateCostText();
+    }
+
+    private void UpdateCostText()
+    {
         if (Active)
         {
-            _ammoText.text = _storeManager.GetAmmoUpgradeCost().ToString() + " Coins";
+            _ammoCostText.text = _storeManager.GetAmmoUpgradeCost().ToString() + " Coins";
         }
     }
 }

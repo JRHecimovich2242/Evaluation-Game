@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 2f;
-    [SerializeField] float health = 100f;
-    [SerializeField] float damage = 25f;
-    [SerializeField] float knockbackStrength = 100f;
-    [SerializeField] float knockbackTime = .5f;
-    [SerializeField] float attackCooldown = 1f;
-    [SerializeField] ParticleSystem deathVFX;
-    [SerializeField] float knockbackScale = 1f;
+    [Header("Enemy Attributes")]
+    [SerializeField] float _moveSpeed = 2f;
+    [SerializeField] float _health = 100f;
+    [SerializeField] float _damage = 25f;
+    [SerializeField] float _knockbackStrength = 100f;
+    [SerializeField] float _knockbackTime = .5f;
+    [SerializeField] float _knockbackScale = 1f;
+    [SerializeField] float _attackCooldown = 1f;
+    [Header("Prefab References")]
+    [SerializeField] ParticleSystem _deathVFX;
+    
 
     private PlayerController _playerController;
     private Rigidbody2D _myRigidbody;
+
     private float _stunTime = 0f;
     private float _stunDuration = 0f;
     private float _attackTime = 0f;
+    private Vector3 _vectorToPlayer;
 
-
-    Vector3 vectorToPlayer;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,36 +47,32 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //Debug.Log("We eating?");
-        if (collision.gameObject.CompareTag("Player") && (Time.time - _attackTime >= attackCooldown))
+        if (collision.gameObject.CompareTag("Player") && (Time.time - _attackTime >= _attackCooldown))
         {
-            //Debug.Log("Eat that Player");
             //Deal damage to player
             _attackTime = Time.time;
-            //PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-            vectorToPlayer = transform.position - _playerController.transform.position;
-            vectorToPlayer.Normalize();
-            _playerController.TakeDamage(damage, vectorToPlayer, knockbackStrength, knockbackTime);
+            _vectorToPlayer = transform.position - _playerController.transform.position;
+            _vectorToPlayer.Normalize();
+            _playerController.TakeDamage(_damage, _vectorToPlayer, _knockbackStrength, _knockbackTime);
         }
     }
 
     //Determines a vector towards the player and sets velocity along that vector
     private void MoveTowardsPlayer()
     {
-        vectorToPlayer = _playerController.transform.position - transform.position;
-        vectorToPlayer.Normalize();
-        //_myRigidbody.velocity = vectorToPlayer * moveSpeed;
-        float z_rotation = Mathf.Atan2(vectorToPlayer.y, vectorToPlayer.x) * Mathf.Rad2Deg;
+        _vectorToPlayer = _playerController.transform.position - transform.position;
+        _vectorToPlayer.Normalize();
+        float z_rotation = Mathf.Atan2(_vectorToPlayer.y, _vectorToPlayer.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, z_rotation + 90);
-        _myRigidbody.velocity = transform.up * -moveSpeed;
+        _myRigidbody.velocity = transform.up * -_moveSpeed;
     }
 
-    //knockbackDir is a normalized Vector3 representing the unit vector originating from the damaging entity and pointing towards the player
+    //knockbackDir is a normalized Vector3 representing the unit vector originating from the damaging object and pointing towards the damaged object
     public void TakeDamage(float damage, Vector3 knockbackDir, float knockbackStrength, float knockbackTime)
     {
         FindObjectOfType<EnemyAudio>().PlayHurtSound();
-        health -= damage;
-        if(health <= 0f)
+        _health -= damage;
+        if(_health <= 0f)
         {
             //Handle enemy death
             var dropper = GetComponent<PowerupDropper>();
@@ -82,10 +81,10 @@ public class EnemyController : MonoBehaviour
                 dropper.DropPickup();
             }
             
-            Instantiate(deathVFX, transform.position, Quaternion.identity);
+            Instantiate(_deathVFX, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
-        _myRigidbody.AddForce(knockbackDir * knockbackStrength * knockbackScale);
+        _myRigidbody.AddForce(knockbackDir * knockbackStrength * _knockbackScale);
         _stunTime = Time.time;
         _stunDuration = knockbackTime;
     }

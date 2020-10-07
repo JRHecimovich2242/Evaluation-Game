@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    [SerializeField] private GameObject healthBar;
-    [SerializeField] private float healthBarWidth;
-    [SerializeField] private float healthBarSmooth;
-    [SerializeField] private float healthBarSmoothEase;
+    [SerializeField] GameObject _healthBar;
+    [SerializeField] float _healthBarWidth;
+    [SerializeField] float _healthBarSmooth;
+    [SerializeField] float _healthBarSmoothEase;
 
     [SerializeField] Text ammoCountText;
     private PlayerController _playerController;
@@ -16,8 +16,8 @@ public class PlayerUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        healthBarWidth = 1;
-        healthBarSmooth = healthBarWidth;
+        _healthBarWidth = 1;
+        _healthBarSmooth = _healthBarWidth;
         _playerController = FindObjectOfType<PlayerController>();
     }
 
@@ -30,9 +30,9 @@ public class PlayerUI : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        healthBarWidth = _playerController.GetHealthFraction();
-        healthBarSmooth += (healthBarWidth - healthBarSmooth) * Time.deltaTime * healthBarSmoothEase;
-        healthBar.transform.localScale = new Vector2(healthBarSmooth, transform.localScale.y);
+        _healthBarWidth = _playerController.GetHealthFraction();
+        _healthBarSmooth += (_healthBarWidth - _healthBarSmooth) * Time.deltaTime * _healthBarSmoothEase;
+        _healthBar.transform.localScale = new Vector2(_healthBarSmooth, transform.localScale.y);
     }
 
     

@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class StoreManager : MonoBehaviour
 {
-    PlayerController player;
-    GameSession gameSession;
+    private PlayerController _player;
+    private GameSession _gameSession;
 
-    [SerializeField] int healthUpgradeCost = 10;
-    [SerializeField] int ammoUpgradeCost = 10;
-    [SerializeField] int gunUpgradeCost = 10;
-    [SerializeField] int ammoUpgradeValue = 5;
-    [SerializeField] int healthUpgradeValue = 10;
+    [SerializeField] int _healthUpgradeCost = 10;
+    [SerializeField] int _ammoUpgradeCost = 10;
+    [SerializeField] int _gunUpgradeCost = 10;
+    [SerializeField] int _ammoUpgradeValue = 5;
+    [SerializeField] int _healthUpgradeValue = 10;
 
     private int numGunUpgrades = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = FindObjectOfType<PlayerController>();
-        gameSession = FindObjectOfType<GameSession>();
+        _player = FindObjectOfType<PlayerController>();
+        _gameSession = FindObjectOfType<GameSession>();
     }
 
     // Update is called once per frame
@@ -50,22 +50,23 @@ public class StoreManager : MonoBehaviour
         }
         
         GetComponent<Canvas>().enabled = false;
-        gameSession.ResumeGame();
+        _gameSession.ResumeGame();
     }
 
+    //Upgrade functions are called on their corresponding button press
     public void UpgradeHealth()
     {
-        if (gameSession.SpendCurrency(healthUpgradeCost))
+        if (_gameSession.SpendCurrency(_healthUpgradeCost))
         {
-            player.IncreaseMaxHealth(healthUpgradeValue);
+            _player.IncreaseMaxHealth(_healthUpgradeValue);
         }
     }
 
     public void UpgradeAmmo()
     {
-        if (gameSession.SpendCurrency(ammoUpgradeCost))
+        if (_gameSession.SpendCurrency(_ammoUpgradeCost))
         {
-            player.IncreaseMaxAmmo(ammoUpgradeValue);
+            _player.IncreaseMaxAmmo(_ammoUpgradeValue);
         }
     }
 
@@ -73,9 +74,9 @@ public class StoreManager : MonoBehaviour
     {
         if(numGunUpgrades < 10)
         {
-            if (gameSession.SpendCurrency(gunUpgradeCost))
+            if (_gameSession.SpendCurrency(_gunUpgradeCost))
             {
-                player.UpdateFireRate();
+                _player.UpdateFireRate();
                 numGunUpgrades++;
             }
         }
@@ -88,17 +89,17 @@ public class StoreManager : MonoBehaviour
 
     public int GetAmmoUpgradeCost()
     {
-        return ammoUpgradeCost;
+        return _ammoUpgradeCost;
     }
 
     public int GetHealthUpgradeCost()
     {
-        return healthUpgradeCost;
+        return _healthUpgradeCost;
     }
 
     public int GetGunUpgradeCost()
     {
-        return gunUpgradeCost;
+        return _gunUpgradeCost;
     }
 
     private void DisableGunUpgradeButtons(string tag)

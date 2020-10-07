@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class MinigunProjectile : MonoBehaviour
 {
-    Rigidbody2D _myRigidbody;
-    Vector2 moveDirection; 
-
 
     [SerializeField] float damage = 100f;
     [SerializeField] float knockbackStrength = 100f;
     [SerializeField] float knockbackTime = .5f;
-    [SerializeField] ParticleSystem shrapnel;
+
+    private Rigidbody2D _myRigidbody;
+    private Vector2 _moveDirection;
+    private bool _doneDamage = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
         _myRigidbody = GetComponent<Rigidbody2D>();
-        moveDirection = _myRigidbody.velocity;
+        _moveDirection = _myRigidbody.velocity;
     }
 
     // Update is called once per frame
@@ -28,17 +30,15 @@ public class MinigunProjectile : MonoBehaviour
     {
         //Debug.Log("Collided");
         GameObject other = collision.gameObject;
-        if(other.CompareTag("Enemy"))
+        if(other.CompareTag("Enemy") && !_doneDamage)
         {
-            //Debug.Log("Shot enemy");
-            moveDirection.Normalize();
-            //Debug.Log("oo");
-            other.GetComponent<EnemyController>().TakeDamage(damage, moveDirection, knockbackStrength, knockbackTime);
-            //Instantiate(shrapnel);
-            //Debug.Log("Ayyy");
+            //In some cases a single projectile was doing damage twice, this should fix that
+            _doneDamage = true;
+            _moveDirection.Normalize();
+            other.GetComponent<EnemyController>().TakeDamage(damage, _moveDirection, knockbackStrength, knockbackTime);
             Destroy(this.gameObject);
         }
-        else if(collision.tag == "Environment")
+        else if(collision.CompareTag("Environment"))
         {
             Destroy(this.gameObject);
         }

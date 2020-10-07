@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemyAudio : MonoBehaviour
 {
-    [SerializeField] AudioClip hurtNoise;
-    AudioSource _myAudioSource;
+    [SerializeField] AudioClip _hurtNoise;
+    private AudioSource _myAudioSource;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +20,6 @@ public class EnemyAudio : MonoBehaviour
 
     public void PlayHurtSound()
     {
-        _myAudioSource.PlayOneShot(hurtNoise);
+        _myAudioSource.PlayOneShot(_hurtNoise);
     }
 }

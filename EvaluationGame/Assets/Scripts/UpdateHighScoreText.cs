@@ -5,17 +5,11 @@ using UnityEngine.UI;
 
 public class UpdateHighScoreText : MonoBehaviour
 {
-    Text highScore;
+    private Text _highScore;
     // Start is called before the first frame update
     void Start()
     {
-        highScore = GetComponent<Text>();
-        highScore.text = PlayerPrefs.GetInt("highscore").ToString();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _highScore = GetComponent<Text>();
+        _highScore.text = PlayerPrefs.GetInt("highscore").ToString();
     }
 }

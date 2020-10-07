@@ -192,15 +192,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42475963ad49f1041916b4950aaef312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  health: 50
-  damage: 10
-  knockbackStrength: 10
-  knockbackTime: 0.8
-  attackCooldown: 1
-  deathVFX: {fileID: 8826925166968677894, guid: dc9c2acd9a11b084e9d0cc10a70a03d7,
+  _moveSpeed: 2
+  _health: 25
+  _damage: 10
+  _knockbackStrength: 50
+  _knockbackTime: 0.5
+  _knockbackScale: 1
+  _attackCooldown: 0.5
+  _deathVFX: {fileID: 8826925166968677894, guid: dc9c2acd9a11b084e9d0cc10a70a03d7,
     type: 3}
-  knockbackScale: 2.45
 --- !u!114 &-4027714064824213819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,15 +213,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5be1e2345e523b4f82a06aa65f7b733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPickupPrefab: {fileID: 5082291916799063522, guid: 4363305dc1afacf44bcad17dd220a82f,
+  _healthPickupPrefab: {fileID: 5082291916799063522, guid: 4363305dc1afacf44bcad17dd220a82f,
     type: 3}
-  coinPrefab: {fileID: 3732338585835539864, guid: 32d3bccc68533c14d96f61275c68f829,
+  _coinPrefab: {fileID: 3732338585835539864, guid: 32d3bccc68533c14d96f61275c68f829,
     type: 3}
-  tripleshotPickupPrefab: {fileID: 4976811722785280885, guid: 1bfccf9c60f61e24fab550aed491dbaf,
+  _tripleshotPickupPrefab: {fileID: 4976811722785280885, guid: 1bfccf9c60f61e24fab550aed491dbaf,
     type: 3}
-  percentChanceHealthDrop: 10
-  percentChanceCoinDrop: 60
-  percentChanceTripleshotDrop: 15
+  _percentChanceHealthDrop: 0
+  _percentChanceCoinDrop: 50
+  _percentChanceTripleshotDrop: 0
 --- !u!82 &6440699462522578120
 AudioSource:
   m_ObjectHideFlags: 0

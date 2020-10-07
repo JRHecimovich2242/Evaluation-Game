@@ -34,7 +34,7 @@ public class WaveManager : MonoBehaviour
         _gameSession = FindObjectOfType<GameSession>();
         _spawnpoints = GetSpawnpoints();
         _numPremadeWaves = premadeEnemyWaves.Count;
-        Debug.Log(_numPremadeWaves);
+        //Debug.Log(_numPremadeWaves);
         _gameSession.StartGame();
     }
 
@@ -197,12 +197,15 @@ public class WaveManager : MonoBehaviour
             shopCounter++;
             if (shopCounter <= shopEveryXWaves)
             {
+                //When _waveActive is false, the WaveManager will begin another wave. If it is time for the shop to spawn, we dont want another wave to appear until it is gone
+                //So _waveActive is only updated when shopCounter <= shopEveryXWaves
                 _waveActive = false;
             }
             
         }
     }
 
+    //Call GameSession.SuspendGame(), set GameActive to false so no more waves are spawned, resets the shopcounter
     private void SuspendGame()
     {
         GameActive = false;
@@ -211,6 +214,7 @@ public class WaveManager : MonoBehaviour
 
     }
 
+    //Set GameActive to be true and set _waveActive to false to allow for the next waves to spawn
     public void ResumeGame()
     {
         GameActive = true;

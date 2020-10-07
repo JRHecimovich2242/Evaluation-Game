@@ -14,7 +14,6 @@ public class GameSession : MonoBehaviour
     private bool _gameActive = false;
     private int _currency = 0;
     private float _timePaused = 0f;
-    private int highscore = 0;
 
     private void Awake()
     {
@@ -27,12 +26,6 @@ public class GameSession : MonoBehaviour
         //Debug.Log("Starting game Session");
         _waveManager = FindObjectOfType<WaveManager>();
         _storeManager = FindObjectOfType<StoreManager>();
-        //if (_storeManager)
-        //{
-        //    Debug.Log("Found store Manager");
-        //}
-        //Debug.Log(_waveManager.name);
-        //Time.timeScale = 0;
     }
 
     // Update is called once per frame
@@ -72,7 +65,6 @@ public class GameSession : MonoBehaviour
         _gameStartTime = Time.time;
         _waveManager.GameActive = true;
         _gameActive = true;
-        //Time.timeScale = 1;
     }
 
     public int GetScore()
@@ -110,10 +102,9 @@ public class GameSession : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
-    public void IncreaseCurrency(int enemyValue)
+    public void IncreaseCurrency(int value)
     {
-        //Should currency be from killing enemies or from dropped coins?
-        _currency += enemyValue;
+        _currency += value;
     }
 
     public bool SpendCurrency(int upgradeValue)
@@ -134,6 +125,7 @@ public class GameSession : MonoBehaviour
         return _currency;
     }
 
+    //SuspendGame enables the store UI and disables player movement
     public void SuspendGame()
     {
         _storeManager.EnableStoreUI();
@@ -141,6 +133,7 @@ public class GameSession : MonoBehaviour
         FindObjectOfType<PlayerController>().InShop = true;
     }
 
+    //ResumeGame reenables player movement and sets the game state to active
     public void ResumeGame()
     {
         _waveManager.ResumeGame();

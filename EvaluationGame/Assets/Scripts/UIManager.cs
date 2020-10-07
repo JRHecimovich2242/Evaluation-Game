@@ -6,11 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-
-    
-    private GameSession _gameSession;
-
-
     // Start is called before the first frame update
     void Start()
     {

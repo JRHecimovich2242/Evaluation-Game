@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class CurrencyCoin : MonoBehaviour
 {
-    [SerializeField] float despawnDelay = 10f;
+    [SerializeField] float _despawnDelay = 10f;
+    [SerializeField] int _coinValue = 1;
     
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, despawnDelay);
+        Destroy(gameObject, _despawnDelay);
     }
 
     // Update is called once per frame
@@ -23,7 +24,7 @@ public class CurrencyCoin : MonoBehaviour
         GameObject other = collision.gameObject;
         if (other.CompareTag("Player"))
         {
-            FindObjectOfType<GameSession>().IncreaseCurrency(1);
+            FindObjectOfType<GameSession>().IncreaseCurrency(_coinValue);
             FindObjectOfType<PlayerController>().PlayPickupNoise();
             Destroy(gameObject);
         }

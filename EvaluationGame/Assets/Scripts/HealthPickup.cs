@@ -21,7 +21,7 @@ public class HealthPickup : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         GameObject other = collision.gameObject;
-        //Debug.Log("Ammo pickup");
+        //Debug.Log("Health pickup");
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().RestoreHealth(pickupValue);

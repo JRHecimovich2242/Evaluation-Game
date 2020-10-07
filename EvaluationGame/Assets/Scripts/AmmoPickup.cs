@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class AmmoPickup : MonoBehaviour
 {
-    [SerializeField] int pickupValue = 10;
-    [SerializeField] float despawnDelay = 10f;
+    [SerializeField] int _pickupValue = 10;
+    [SerializeField] float _despawnDelay = 10f;
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, despawnDelay);
+        Destroy(gameObject, _despawnDelay);
     }
 
     // Update is called once per frame
@@ -23,7 +23,7 @@ public class AmmoPickup : MonoBehaviour
         GameObject other = collision.gameObject;
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().IncreaseMaxAmmo(pickupValue);
+            other.GetComponent<PlayerController>().IncreaseMaxAmmo(_pickupValue);
             Destroy(gameObject);
         }
     }
