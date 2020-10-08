@@ -12,9 +12,13 @@ public class StoreManager : MonoBehaviour
     [SerializeField] int _gunUpgradeCost = 10;
     [SerializeField] int _ammoUpgradeValue = 5;
     [SerializeField] int _healthUpgradeValue = 10;
+    [SerializeField] int _gunTypeUpgradeCost = 50;
+    
 
-    private int numGunUpgrades = 0;
-
+    private int _numGunUpgrades = 0;
+    private int _numHealthUpgrades = 0;
+    private int _numAmmoUpgrades = 0;
+    private bool _gunTypeUpgradeActive = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,10 +37,15 @@ public class StoreManager : MonoBehaviour
         GetComponent<Canvas>().enabled = true;
         FindObjectOfType<UpdateAmmoCost>().Active = true;
         FindObjectOfType<UpdateHealthCost>().Active = true;
-        if (numGunUpgrades < 10)
+        if (_numGunUpgrades < 10)
         {
             FindObjectOfType<UpdateGunCost>().Active = true;
         }
+        if (_gunTypeUpgradeActive)
+        {
+            FindObjectOfType<UpdateGunTypeCost>().Active = true;
+        }
+
         
     }
 
@@ -44,7 +53,7 @@ public class StoreManager : MonoBehaviour
     {
         FindObjectOfType<UpdateAmmoCost>().Active = false;
         FindObjectOfType<UpdateHealthCost>().Active = false;
-        if(numGunUpgrades < 10)
+        if(_numGunUpgrades < 10)
         {
             FindObjectOfType<UpdateGunCost>().Active = false;
         }
@@ -59,7 +68,13 @@ public class StoreManager : MonoBehaviour
         if (_gameSession.SpendCurrency(_healthUpgradeCost))
         {
             _player.IncreaseMaxHealth(_healthUpgradeValue);
+            _numHealthUpgrades++;
+            if (_numHealthUpgrades % 3 == 0 && _numHealthUpgrades > 0)
+            {
+                _healthUpgradeCost += 5;
+            }
         }
+        
     }
 
     public void UpgradeAmmo()
@@ -67,24 +82,47 @@ public class StoreManager : MonoBehaviour
         if (_gameSession.SpendCurrency(_ammoUpgradeCost))
         {
             _player.IncreaseMaxAmmo(_ammoUpgradeValue);
+            _numAmmoUpgrades++;
+            if (_numAmmoUpgrades % 3 == 0 && _numAmmoUpgrades > 0)
+            {
+                _ammoUpgradeCost += 5;
+            }
         }
+        
     }
 
     public void UpgradeGun()
     {
-        if(numGunUpgrades < 10)
+        if(_numGunUpgrades < 12)
         {
             if (_gameSession.SpendCurrency(_gunUpgradeCost))
             {
                 _player.UpdateFireRate();
-                numGunUpgrades++;
+                _numGunUpgrades++;
+                if (_numGunUpgrades % 3 == 0 && _numGunUpgrades > 0)
+                {
+                    _gunUpgradeCost += 5;
+
+                }
             }
         }
-        if(numGunUpgrades >= 10)
+        
+        if (_numGunUpgrades >= 12)
         {
             //Disable gun upgrade buttons
             DisableGunUpgradeButtons("Gun Upgrade");
         }
+    }
+
+    public void UpgradeGunType()
+    {
+        if (_gameSession.SpendCurrency(_gunTypeUpgradeCost))
+        {
+            FindObjectOfType<PlayerController>().StartTripleShot();
+            FindObjectOfType<PlayerController>().PermaTripleshot = true;
+            DisableGunTypeUpgrade("Gun Type");
+        }
+        
     }
 
     public int GetAmmoUpgradeCost()
@@ -102,6 +140,11 @@ public class StoreManager : MonoBehaviour
         return _gunUpgradeCost;
     }
 
+    public int GetGunTypeUpgradeCost()
+    {
+        return _gunTypeUpgradeCost;
+    }
+
     private void DisableGunUpgradeButtons(string tag)
     {
         GameObject[] canvasItems = GameObject.FindGameObjectsWithTag(tag);
@@ -109,5 +152,16 @@ public class StoreManager : MonoBehaviour
         {
             item.SetActive(false);
         }
+    }
+
+
+    public void DisableGunTypeUpgrade(string tag)
+    {
+        GameObject[] canvasItems = GameObject.FindGameObjectsWithTag(tag);
+        foreach (GameObject item in canvasItems)
+        {
+            item.SetActive(false);
+        }
+        _gunTypeUpgradeActive = false;
     }
 }

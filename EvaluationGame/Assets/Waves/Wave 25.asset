@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d574e1a3615264a973623c2e56b811, type: 3}
   m_Name: Wave 25
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 985710309605589405, guid: 3e8385572bc8c244b93809b53fe124e5,
-    type: 3}
-  spawnpointPrefab: {fileID: 8279891406504867701, guid: 10e780e11b3bab944b2fdb689682387a,
-    type: 3}
-  timeBetweenSpawns: 0.75
-  randomSpawnOffset: 0.3
-  numEnemies: 5
-  startDelay: 0
-  isSpecialWave: 0
+  enemiesInWave:
+  - EnemyPrefab: {fileID: 985710309605589405, guid: 3e8385572bc8c244b93809b53fe124e5,
+      type: 3}
+    NumEnemies: 20
+  - EnemyPrefab: {fileID: 985710309605589405, guid: 7c17237ea40422947bec335d3a338561,
+      type: 3}
+    NumEnemies: 10
+  - EnemyPrefab: {fileID: 985710309605589405, guid: bc64654daa996fb4dac0f41d34552341,
+      type: 3}
+    NumEnemies: 2
+  _delayBetweenSpawns: 1
+  _randomSpawnOffset: 0.5

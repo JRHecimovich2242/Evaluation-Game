@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private float _health = 0f;
     private int _currentAmmo = 0;
     public bool InShop = false;
+    public bool PermaTripleshot = false;
 
     [Header("Player Attributes")]
     [SerializeField] int _maxAmmo = 30;
@@ -43,6 +44,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip _hurtNoise;
     [SerializeField] AudioClip _pickupNoise;
     [SerializeField] AudioClip _reloadSound;
+
+    Coroutine reload;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,14 +59,9 @@ public class PlayerController : MonoBehaviour
     {
         if (_isAlive)
         {
-            if (Time.time - _stunTime >= _stunDuration && !InShop)
+            if (Time.time - _stunTime >= _stunDuration)
             {
                 Move();
-            }
-            else if (InShop)
-            {
-                //Stop player when shop is open
-                _myRigidbody.velocity = Vector2.zero;
             }
         }
     }
@@ -80,7 +78,7 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.R) && !_reloading && !InShop)
             {
-                StartCoroutine(Reload());
+                reload = StartCoroutine(Reload());
             }
         }
     }
@@ -131,7 +129,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Reload());
+            reload = StartCoroutine(Reload());
         }
     }
 
@@ -173,6 +171,7 @@ public class PlayerController : MonoBehaviour
         {
             _shootingCooldown = .1f;
         }
+        _myAudioSource.PlayOneShot(_pickupNoise);
     }
 
     private Vector3 RotateVector(Vector3 vect, int angle)
@@ -203,13 +202,21 @@ public class PlayerController : MonoBehaviour
         _myAudioSource.PlayOneShot(_reloadSound);
         _reloading = true;
         yield return new WaitForSeconds(_reloadTime);
-        _tripleshotActive = false;
+        if (!PermaTripleshot)
+        {
+            _tripleshotActive = false;
+        }
         _currentAmmo = _maxAmmo;
         _reloading = false;
     }
 
     public void StartTripleShot()
     {
+        if (_reloading)
+        {
+            StopCoroutine(reload);
+            _reloading = false;
+        }
         _tripleshotActive = true;
         _currentAmmo = _maxAmmo;
         _myAudioSource.PlayOneShot(_pickupNoise);
@@ -236,6 +243,7 @@ public class PlayerController : MonoBehaviour
     public void IncreaseMaxHealth(float upgradeValue)
     {
         _maxHealth += upgradeValue;
+        _health += upgradeValue;
         _myAudioSource.PlayOneShot(_pickupNoise);
     }
 

@@ -46,23 +46,36 @@ MonoBehaviour:
   spawnpointParent: {fileID: 8279891406504867701, guid: 10e780e11b3bab944b2fdb689682387a,
     type: 3}
   premadeEnemyWaves:
-  - {fileID: 11400000, guid: 0e24a6eaddd963848abed9d5e117b1ef, type: 2}
-  - {fileID: 11400000, guid: a9367c4a337e86c4098d6097ac310202, type: 2}
-  - {fileID: 11400000, guid: 9edc5678a8631254f9b7b3bc485ecbac, type: 2}
-  - {fileID: 11400000, guid: 1b1c92c0a414794489ee68bfab078a25, type: 2}
-  - {fileID: 11400000, guid: b64c7cb97e1c70847aa96fbc1a531a58, type: 2}
-  - {fileID: 11400000, guid: 6811da1ec45876043bc53045edb7a292, type: 2}
-  - {fileID: 11400000, guid: e3f03537ea8ad9744b04fa5ba6012678, type: 2}
-  - {fileID: 11400000, guid: 43ce1f3909727114390044c8999518e4, type: 2}
-  - {fileID: 11400000, guid: 669e2d2db4ef008479b52098a503537d, type: 2}
-  - {fileID: 11400000, guid: d57f2c31f9cda884c95b76f6889b4f24, type: 2}
-  - {fileID: 11400000, guid: 065f284548a22c2449f5ad12fcf33adc, type: 2}
-  fiveEnemyWave: {fileID: 11400000, guid: 2724399904a6f4a4c9547869cf36bde3, type: 2}
-  oneHeavyEnemy: {fileID: 11400000, guid: f439ce7925700364eb58fd7ea6ce81c0, type: 2}
-  fiveFastEnemies: {fileID: 11400000, guid: 61c171080ec90294792513a74c2a800b, type: 2}
+  - {fileID: 11400000, guid: a89293018f271a84e8474de39e557a3e, type: 2}
+  - {fileID: 11400000, guid: aefd97a710d9fc14f91e86fd98ddad4d, type: 2}
+  - {fileID: 11400000, guid: 3717c122c72677548a1573d21edbb67e, type: 2}
+  - {fileID: 11400000, guid: 769a7d1601bfac9498e244fb497fffb2, type: 2}
+  - {fileID: 11400000, guid: becae79242cc38042b43aae5317f8801, type: 2}
+  - {fileID: 11400000, guid: 66d31bbdb817a0e4186dd2773d7863cc, type: 2}
+  - {fileID: 11400000, guid: c6ea5de9688dc93469fd2e0c8717ccb0, type: 2}
+  - {fileID: 11400000, guid: d66a4b7f77d70374f8f739c8701a195a, type: 2}
+  - {fileID: 11400000, guid: 77989e2e10c36b4478dc1b111edb1cf2, type: 2}
+  - {fileID: 11400000, guid: 2bb7906977b58304aa6a8c3f20068d3b, type: 2}
+  - {fileID: 11400000, guid: ee36c546644c75a48a346c81821ec262, type: 2}
+  - {fileID: 11400000, guid: 655855be20482294b8bc2ce817cb8810, type: 2}
+  - {fileID: 11400000, guid: 466878fce24cc8245b0b999f1c41e63f, type: 2}
+  - {fileID: 11400000, guid: beee160c73c81274c936ee3021fef0e1, type: 2}
+  - {fileID: 11400000, guid: 6d08352a1a062f3428723ee9d5773d65, type: 2}
+  - {fileID: 11400000, guid: f2063c1751b89194eb71a085c6e4b86f, type: 2}
+  - {fileID: 11400000, guid: b614dc638793eb54d8a382b59c028b6c, type: 2}
+  - {fileID: 11400000, guid: 54f0e3aafd0175b44953a96027fd6dca, type: 2}
+  - {fileID: 11400000, guid: 8e88fc4cf7f85ec4abec3d2ad5bc221b, type: 2}
+  - {fileID: 11400000, guid: 54cc0d2cd58f6364d987922d434ddafb, type: 2}
+  - {fileID: 11400000, guid: 73e63b3ae0f5f524b8e7fbd4809734c6, type: 2}
+  - {fileID: 11400000, guid: b653a22b104d17649adcb02da71f7797, type: 2}
+  - {fileID: 11400000, guid: db73cd2bccfdbde43ae3dcffeeda45e9, type: 2}
+  - {fileID: 11400000, guid: 90cd87b7969b4924390b15e86d89194b, type: 2}
+  - {fileID: 11400000, guid: a5f2cbc36ea87d84294d859567aef6a2, type: 2}
   _currentWave: 0
+  _numPremadeWaves: 0
   _waveActive: 0
+  _activeWaves: 0
   GameActive: 0
-  delayBetweenWaves: 5
   _specialWaveChance: 10
   shopCounter: 0
+  shopEveryXWaves: 5

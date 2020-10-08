@@ -14,6 +14,7 @@ public class GameSession : MonoBehaviour
     private bool _gameActive = false;
     private int _currency = 0;
     private float _timePaused = 0f;
+    [SerializeField] int moneyForFinishingWave = 1;
 
     private void Awake()
     {
@@ -53,9 +54,9 @@ public class GameSession : MonoBehaviour
         }
     }
 
-    public void UpdateCurrentWave(int currWave)
+    public void UpdateCurrentWave()
     {
-        _currentWave = currWave;
+        _currentWave++;
     }
 
     //Called from start button on canvas
@@ -139,5 +140,11 @@ public class GameSession : MonoBehaviour
         _waveManager.ResumeGame();
         _gameActive = true;
         FindObjectOfType<PlayerController>().InShop = false;
+    }
+
+    public void PostWaveActions()
+    {
+        IncreaseCurrency(moneyForFinishingWave);
+        UpdateCurrentWave();
     }
 }

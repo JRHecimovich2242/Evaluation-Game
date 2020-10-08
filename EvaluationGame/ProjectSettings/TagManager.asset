@@ -8,6 +8,7 @@ TagManager:
   - Projectile
   - Environment
   - Gun Upgrade
+  - Gun Type
   layers:
   - Default
   - TransparentFX
