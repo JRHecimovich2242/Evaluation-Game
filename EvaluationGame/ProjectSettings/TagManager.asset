@@ -64,3 +64,6 @@ TagManager:
   - name: Player
     uniqueID: 3779889963
     locked: 0
+  - name: Crosshair
+    uniqueID: 1625738699
+    locked: 0

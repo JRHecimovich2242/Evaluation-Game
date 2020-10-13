@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class CurrencyCoin : MonoBehaviour
 {
-    [SerializeField] float _despawnDelay = 10f;
+    //[SerializeField] float _despawnDelay = 10f;
     [SerializeField] int _coinValue = 1;
     
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, _despawnDelay);
+        //Destroy(gameObject, _despawnDelay);
     }
 
     // Update is called once per frame

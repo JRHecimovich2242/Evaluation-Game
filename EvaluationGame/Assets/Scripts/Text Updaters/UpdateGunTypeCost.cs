@@ -25,7 +25,7 @@ public class UpdateGunTypeCost : MonoBehaviour
     {
         if (Active)
         {
-            Debug.Log("OOOOOOOOOOOOO");
+            //Debug.Log("OOOOOOOOOOOOO");
             _gunTypeCostText.text = _storeManager.GetGunTypeUpgradeCost().ToString() + " Coins";
         }
     }

@@ -18,9 +18,9 @@ MonoBehaviour:
     NumEnemies: 0
   - EnemyPrefab: {fileID: 985710309605589405, guid: 7c17237ea40422947bec335d3a338561,
       type: 3}
-    NumEnemies: 8
+    NumEnemies: 10
   - EnemyPrefab: {fileID: 985710309605589405, guid: bc64654daa996fb4dac0f41d34552341,
       type: 3}
-    NumEnemies: 1
+    NumEnemies: 2
   _delayBetweenSpawns: 0.5
   _randomSpawnOffset: 0.3

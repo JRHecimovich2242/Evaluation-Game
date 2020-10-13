@@ -188,9 +188,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Controls: \nWASD to move\nLMB to shoot\nR to reload\n\nRed coins restore
-    health\nYellow coins can be collected and spent on upgrades\nGreen coins upgrade
-    your minigun temporarily and restore ammo"
+  m_Text: "Controls: \nWASD to move\nLMB to shoot\nR to reload\nPress Esc to Pause\nRed
+    coins restore health\nYellow coins can be collected and spent on upgrades\nGreen
+    coins upgrade your minigun temporarily and restore ammo"
 --- !u!222 &175807822
 CanvasRenderer:
   m_ObjectHideFlags: 0

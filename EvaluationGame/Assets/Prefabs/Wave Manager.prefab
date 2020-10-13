@@ -71,11 +71,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db73cd2bccfdbde43ae3dcffeeda45e9, type: 2}
   - {fileID: 11400000, guid: 90cd87b7969b4924390b15e86d89194b, type: 2}
   - {fileID: 11400000, guid: a5f2cbc36ea87d84294d859567aef6a2, type: 2}
-  _currentWave: 0
+  repeatingWave: {fileID: 11400000, guid: 1d01181543a27084ba0121fe46fd6334, type: 2}
+  _currentWave: 24
   _numPremadeWaves: 0
   _waveActive: 0
   _activeWaves: 0
   GameActive: 0
-  _specialWaveChance: 10
   shopCounter: 0
   shopEveryXWaves: 5
